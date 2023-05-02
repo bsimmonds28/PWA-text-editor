@@ -2,7 +2,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = () => {
   return {
@@ -20,7 +19,7 @@ module.exports = () => {
       new HtmlWebpackPlugin({
       template: './index.html',
       //Confirm this is right
-      title: 'Text Editor'
+      title: 'JATE'
     }),
 
     // Injects our custom service worker
@@ -34,7 +33,7 @@ module.exports = () => {
       fingerprints: false,
       inject: true,
       name: 'Text Editor',
-      short_name: 'Editor',
+      short_name: 'JATE',
       description: 'Edit your text!',
       background_color: '#225ca3',
       theme_color: '#225ca3',
@@ -45,20 +44,6 @@ module.exports = () => {
           src: path.resolve('src/images/logo.png'),
           sizes: [96, 128, 192, 256, 384, 512],
           destination: path.join('assets', 'icons'),
-        },
-      ],
-    }),
-
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-      // Define the assets that should be precached by Workbox.
-      include: [/\.html$/, /\.js$/, /\.css$/, /\.png$/, /\.jpg$/, /\.svg$/, /\.woff2$/],
-      // Define a runtime caching strategy for API requests.
-      runtimeCaching: [
-        {
-          urlPattern: /^https:\/\/jsonplaceholder\.typicode\.com/,
-          handler: 'StaleWhileRevalidate',
         },
       ],
     }),
