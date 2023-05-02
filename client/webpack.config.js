@@ -2,9 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
-
-// TODO: Add and configure workbox plugins for a service worker and manifest file.
-// TODO: Add CSS loaders and babel to webpack.
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = () => {
   return {
@@ -51,7 +49,20 @@ module.exports = () => {
       ],
     }),
 
-    ],
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      // Define the assets that should be precached by Workbox.
+      include: [/\.html$/, /\.js$/, /\.css$/, /\.png$/, /\.jpg$/, /\.svg$/, /\.woff2$/],
+      // Define a runtime caching strategy for API requests.
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/jsonplaceholder\.typicode\.com/,
+          handler: 'StaleWhileRevalidate',
+        },
+      ],
+    }),
+  ],
 
     module: {
       rules: [
